@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "566923388518",
+    "project_id": "paper-upload-818c4",
+    "storage_bucket": "paper-upload-818c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566923388518:android:42e6f3f50ec727a24eafa7",
+        "android_client_info": {
+          "package_name": "com.nickinfinity.paperstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566923388518-lllolhko9kece4u1j0q61t7kgpbermqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbhVTQptQYiznTgmo0Sd9m-6H2QwA3Fxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566923388518-lllolhko9kece4u1j0q61t7kgpbermqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566923388518:android:f094f95e48bdea634eafa7",
+        "android_client_info": {
+          "package_name": "com.nickinfinity.paperupload"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566923388518-lllolhko9kece4u1j0q61t7kgpbermqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbhVTQptQYiznTgmo0Sd9m-6H2QwA3Fxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566923388518-lllolhko9kece4u1j0q61t7kgpbermqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
