@@ -52,13 +52,17 @@ public class MainActivity extends AppCompatActivity {
         currentPhotoPath = "";
         photoURI = null;
 
-        checkPermissions();
+        askPermissions();
         btn_capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                dispatchTakePictureIntent();
-
+                if (checkPermissions()) {
+                    dispatchTakePictureIntent();
+                } else {
+                    askPermissions();
+                    Toast.makeText(getApplicationContext(), "Please grant required permissions", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -66,13 +70,16 @@ public class MainActivity extends AppCompatActivity {
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                gallery.setType("image/*");
-                // gallery.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(gallery, PICK_IMAGE);
-                //startActivityForResult(Intent.createChooser(gallery,"Select Picture"),PICK_IMAGE);
-
+                if (checkPermissions()) {
+                    Intent gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    gallery.setType("image/*");
+                    // gallery.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(gallery, PICK_IMAGE);
+                    //startActivityForResult(Intent.createChooser(gallery,"Select Picture"),PICK_IMAGE);
+                } else {
+                    askPermissions();
+                    Toast.makeText(getApplicationContext(), "Please grant required permissions", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -80,13 +87,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void checkPermissions() {
+    public boolean checkPermissions() {
+        return ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void askPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("Please Grant Permissions");
-                    builder.setMessage("Camera, Access Storage");
+                    builder.setMessage("Camera & Storage permissions are required for this app to function properly");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(MainActivity.this, new String[]{
@@ -107,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 // Toast.makeText(MainActivity.this, "Permissions Granted", Toast.LENGTH_SHORT).show();
+
             }
 
         } else {
