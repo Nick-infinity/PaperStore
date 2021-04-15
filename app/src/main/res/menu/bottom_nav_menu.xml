@@ -3,11 +3,13 @@
     <item
         android:id="@+id/uploadItem"
         android:title="Upload"
-        android:icon="@drawable/ic_upload_file"/>
+        android:icon="@drawable/ic_upload_file"
+        android:state_checked="true" android:color="@color/design_default_color_primary" />
     <item
         android:id="@+id/downloadItem"
         android:title="Download"
-        android:icon="@drawable/ic_file_download"/>
+        android:icon="@drawable/ic_file_download"
+        android:state_checked="true" android:color="@color/design_default_color_primary"/>
 
 
 </menu>
