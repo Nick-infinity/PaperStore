@@ -72,10 +72,9 @@ public class UploadForm extends AppCompatActivity {
                             clearFields();
                             finish();
                             Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
-
-
                         }
                     });
+
                 }
 
 

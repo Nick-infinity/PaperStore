@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -18,11 +20,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fire {
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseRef;
     Context context;
 
 
@@ -30,16 +36,26 @@ public class Fire {
         this.context = context;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference();
 
     }
 
-    public interface FireResponseListener
-    {
+    public interface FireResponseListener {
         void onSuccessResponse();
     }
 
+    private void createData(String branch, String semester, String subject, String path) {
 
-    public void uploadPicture(Uri photoURI, View view, String branch, String semester, String subject , FireResponseListener fireResponseListener) {
+        DatabaseReference finalRef = databaseRef.child(branch).child(semester).child(subject);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Map<String, Object> papers = new HashMap<>();
+        papers.put(timeStamp, path);
+        finalRef.updateChildren(papers);
+
+    }
+
+    public void uploadPicture(Uri photoURI, View view, String branch, String semester, String subject, FireResponseListener fireResponseListener) {
         switch (branch) {
             case "ece": {
                 branch = "electronics";
@@ -68,17 +84,20 @@ public class Fire {
         }
         final ProgressDialog pd = new ProgressDialog(context);
         pd.setTitle("Image Uploading...");
-
+        // cant cancel the upload once it starts
+        pd.setCancelable(false);
         pd.show();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String path = branch + "/" + semester + "/" + subject + "/" + "IMG_" + subject.toUpperCase() + "_" + timeStamp + ".jpg";
         StorageReference reference = storageReference.child(path);
+        String finalBranch = branch;
         reference.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 pd.dismiss();
                 Snackbar.make(view, "Image Uploaded", Snackbar.LENGTH_LONG).show();
+                createData(finalBranch, semester, subject, path);
                 fireResponseListener.onSuccessResponse();
 
             }
